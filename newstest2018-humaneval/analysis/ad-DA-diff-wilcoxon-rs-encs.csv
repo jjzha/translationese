@@ -1,0 +1,6 @@
+ CUNI-Transformer.5595 uedin.5630 online-B.0 online-A.0 online-G.0
+CUNI-Transformer.5595 - 0.21*** 0.49*** 0.71*** 0.84***  
+uedin.5630 -0.21 - 0.28*** 0.5*** 0.63***  
+online-B.0 -0.49 -0.28 - 0.22*** 0.35***  
+online-A.0 -0.71 -0.5 -0.22 - 0.13***  
+online-G.0 -0.84 -0.63 -0.35 -0.13 -  
