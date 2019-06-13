@@ -1,4 +1,4 @@
-#ABOUT
+# ABOUT
 
 This repository contains supplementary material for the publication:
 
