@@ -8,7 +8,7 @@
 import os
 import argparse
 import pandas as pd
-from segid import get_ids, seg
+from segid import get_ids
 from scores import score
 from wilcoxon import changes
 from relatedness import related
