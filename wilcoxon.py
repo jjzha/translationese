@@ -19,7 +19,7 @@ def changes(both, src , tra, lang, year):
 
     print()
     print('WMT INPUT')
-    with open('original_input.txt') as f:
+    with open('significance/wmt_input.txt') as f:
         for line in re.findall(year+'_'+lang+'.csv(.*?)wilcoxon',f.read(), re.S):
             line = line.replace('[1]','').replace('"', '').strip().split('\n')
             it = iter(line)
@@ -39,7 +39,7 @@ def changes(both, src , tra, lang, year):
 
     print()
     print('ONLY ORIGINAL INPUT')
-    with open('source_input.txt') as f:
+    with open('significance/original_input.txt') as f:
         for line in re.findall(year+'_'+lang+'.csv(.*?)wilcoxon',f.read(), re.S):
             line = line.replace('[1]','').replace('"', '').strip().split('\n')
             it = iter(line)
@@ -59,7 +59,7 @@ def changes(both, src , tra, lang, year):
 
     print()
     print('ONLY TRANSLATIONESE INPUT')
-    with open('trans_input.txt') as f:
+    with open('significance/trans_input.txt') as f:
         for line in re.findall(year+'_'+lang+'.csv(.*?)wilcoxon',f.read(), re.S):
             line = line.replace('[1]','').replace('"', '').strip().split('\n')
             it = iter(line)
