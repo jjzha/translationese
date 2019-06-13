@@ -8,7 +8,7 @@
 import os
 import argparse
 import pandas as pd
-from segid import get_ids
+from segid import get_ids, seg
 from scores import score
 from wilcoxon import changes
 from relatedness import related
@@ -20,6 +20,43 @@ files_id = ['test-wmt16/', 'test-wmt17/', 'test-wmt18/']
 
 
 def main():
+
+    # calculates the relatedness of language pairs, sends the data to a CSV for R usage.
+    if args.related:
+        # obtained from using lang2vec
+        sim_dic = {'zhen': 0.47474157544924134, 'enzh': 0.47474157544924134,
+                   'csen': 0.46244754746607586, 'encs': 0.46244754746607586,
+                   'eten': 0.53552677878953870, 'enet': 0.53552677878953870,
+                   'fien': 0.43609034102562430, 'enfi': 0.43609034102562430,
+                   'deen': 0.75274736442567450, 'ende': 0.75274736442567450,
+                   'ruen': 0.61155187271550440, 'enru': 0.61155187271550440,
+                   'tren': 0.19756942534896915, 'entr': 0.19756942534896915
+                   }
+        df = {'PAIR': [], 'RAW_SRC': [], 'ABS_D': [], 'REL_D': []}
+        f = open('related.csv', 'w')
+        for path_seg, path_id in zip(files_seg, files_id):
+            for filename in os.listdir(path_seg):
+                filename_split = filename.split('-')
+                if len(filename_split) > 2 and filename_split[-1].endswith('.csv') and filename_split[1] == 'seg':
+                    filename_lang = ''.join(filename_split[3:5])
+                    filename_lang = filename_lang[:4]
+                    for testset in os.listdir(path_id):
+                        testset_split = testset.split('-')
+                        if filename_lang == testset_split[1] and testset_split[-1].startswith('src'):
+                            src_ids, ref_ids = get_ids(path_id + testset, filename_split[-2])
+                            result = score(path_seg + filename, src_ids, ref_ids, filename_lang, False)
+                            related(result, path_id[5:10], filename_lang, df)
+                        else:
+                            pass
+            else:
+                pass
+
+        dif_df = pd.DataFrame.from_dict(df)
+        dif_df['SIM'] = dif_df['PAIR'].map(sim_dic)
+        dif_df = dif_df.sort_values(by=['REL_D'], ascending=False).reset_index(drop=True)
+        f.write(dif_df.to_csv(index=False))
+        f.close()
+
     # loop through test data and human evaluation (DA) data.
     for path_seg, path_id in zip(files_seg, files_id):
         print('YEAR: ', path_id[5:10])
@@ -57,25 +94,6 @@ def main():
                                 # print()
                                 changes(df_final_both, df_final_src, df_final_ref, filename_lang, path_id[5:10])
                                 print()
-                            else:
-                                pass
-
-                        # calculates the relatedness of language pairs, sends the data to a CSV for R usage.
-                        elif args.language_pair and args.related:
-                            df = {'PAIR': [], 'RAW_SRC': [], 'ABS_D': [], 'REL_D': []}
-                            f = open('related.csv', 'w')
-                            if filename_lang == testset_split[1] and testset_split[-1].startswith('src'):
-                                src_ids, ref_ids = get_ids(path_id + testset, filename_split[-2])
-                                result = score(path_seg + filename, src_ids, ref_ids, filename_lang, False)
-                                related(result, path_id[5:10], filename_lang, df)
-                                pd.set_option('display.expand_frame_repr', False)
-                                sim_dic = langsim()
-                                dif_df = pd.DataFrame.from_dict(df)
-                                dif_df['SIM'] = dif_df['PAIR'].map(sim_dic)
-                                dif_df = dif_df.sort_values(by=['REL_D'], ascending=False).reset_index(drop=True)
-                                f.write(dif_df.to_csv(index=False))
-                                f.close()
-
                             else:
                                 pass
 
