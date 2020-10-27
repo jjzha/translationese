@@ -4,6 +4,8 @@ This repository contains supplementary material for the publication:
 
 Mike Zhang, Antonio Toral. (2019). The Effect of Translationese in Machine Translation Test Sets. WMT19.
 
+Note (Oct 27 2020): this repository is not maintained.
+
 ## General info:
 
 There is one main script: `main.py`
